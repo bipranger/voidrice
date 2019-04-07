@@ -1,0 +1,38 @@
+conky.config = {
+	alignment = 'bottom_left',
+	background = true,
+	color2 = '3498DB',
+	cpu_avg_samples = 2,
+	default_color = 'F9FAF9',
+	double_buffer = true,
+	font = 'Source Code Pro:style=semibold: size=10',
+	draw_shades = false,
+	gap_x = 25,
+	gap_y = 45,
+	minimum_width = 200,
+	no_buffers = true,
+	own_window = true,
+	own_window_type = 'override',
+	own_window_transparent = true,
+	update_interval = 2.0,
+	use_xft = true,
+}
+conky.text = [[
+${color2}Abrir novo terminal - ${color}mod+Enter
+${color2}Matar janela em foco - ${color}mod+Shift+q
+${color2}Firefox - ${color}mod+F1
+${color2}Nemo (navegador de arquivos) - ${color}mod+F2
+#${color2}toggle split direction - ${color}mod+q
+${color2}Acesso rápido - ${color}mod+d
+${color2}Menu - ${color}mod+z
+#${color2}Configurações - ${color}mod+z
+${color2}Ir para workspace 1-8 - ${color}mod+1-8
+${color2}Enviar to workspace 1-8 - ${color}mod+Ctrl+1-8
+#${color2}Navegar workspaces - ${color}mod+Ctrl+arrowkeys
+#${color2}Alternar janela flutuante - ${color}mod+Shift+Space
+${color2}Travar a tela - ${color}mod+esc
+${color2}Sair - ${color}mod+Shift+end
+${color}desligar - shift+d
+${color2}Ajuda - ${color}mod+Shift+h
+Mod padrão=Tecla windows (Super)
+]]
