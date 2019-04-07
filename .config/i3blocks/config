@@ -8,44 +8,42 @@ interval=once
 signal=9
 
 [music]
-label=🎼
-interval=once
+label=
+interval=1
 signal=11
 
 [news]
-label=📰
+label=
 interval=once
 signal=6
 
 [pacpackages]
-label=📦
+label=
 interval=once
 signal=8
 
 [torrent]
+label=
 interval=20
 signal=7
 
-[weather]
-interval=18000
-signal=5
+#[weather]
+#interval=3600
+#signal=5
 
-[mailbox]
-label=📬
-interval=180
-signal=12
+#[mailbox]
+#label=📬
+#interval=180
+#signal=12
 
 #[memory]
 #interval=30
-#label=🧠
+#label=
 
 #[cpu]
 #interval=15
 #label=💻
 
-[volume]
-interval=once
-signal=10
 
 #[disk]
 #interval=60
@@ -53,18 +51,23 @@ signal=10
 
 #[disk]
 #interval=60
-#command=disk /home 🏠
+#command=disk /home 
 
 [battery]
 command=battery BAT0
 interval=5
 
-[clock]
-label=📅
-interval=30
-
 [internet]
 interval=10
 
-[help]
+[volume]
 interval=once
+signal=10
+
+[clock]
+#label=📅
+interval=30
+
+
+#[help]
+#interval=once
