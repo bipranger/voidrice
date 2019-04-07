@@ -9,8 +9,10 @@
 
 # #---Basic Definitions---# #
 for_window [class="^.*"] border pixel 2
-gaps inner 15
-gaps outer 15
+gaps inner 6
+gaps outer -2
+new_window pixel 2
+new_float normal
 set $term --no-startup-id $TERMINAL
 set $mod Mod4
 set $stoprec --no-startup-id dmenurecord kill
@@ -19,7 +21,41 @@ set $reboot sudo -A reboot
 set $netrefresh --no-startup-id sudo -A systemctl restart NetworkManager
 set $hibernate sudo -A systemctl suspend
 
+# Set Xresources colors:
+set_from_resource $darkblack	color0  #000000
+set_from_resource $black	color8  #000000
+set_from_resource $darkred	color1  #000000
+set_from_resource $red		color9  #000000
+set_from_resource $darkgreen	color2  #000000
+set_from_resource $green	color10 #000000
+set_from_resource $darkyellow	color3  #000000
+set_from_resource $yellow	color11 #000000
+set_from_resource $darkblue	color4  #000000
+set_from_resource $blue		color12 #000000
+set_from_resource $darkmagenta	color5  #000000
+set_from_resource $magenta	color13 #000000
+set_from_resource $darkcyan	color6  #000000
+set_from_resource $cyan		color14 #000000
+set_from_resource $darkwhite	color7  #000000
+set_from_resource $white	color15 #000000
+set $transparent		#00000000
+
+#                       BORDER		BACKGROUND	TEXT		INDICATOR   CHILD_BORDER
+client.focused		$red		$red		$magenta	$darkmagenta		$darkblue
+client.unfocused	$transparent	$blue		$white		$darkblue		$darkblack
+client.focused_inactive	$transparent	$blue		$white		$darkblue		$darkblack
+client.urgent		$darkred	$darkred	$black		$darkred		$darkred
+client.background $black
+
+# Hide borders
+hide_edge_borders smart
+
+#Font for window titles. Will also be used by the bar unless a
+#different font is used in the bar {} block below.
+font xft: Roboto 11
+
 # #---Dropdown Windows---# #
+
 # General dropdown window traits. The order can matter.
 for_window [instance="dropdown_*"] floating enable
 for_window [instance="dropdown_*"] move scratchpad
@@ -40,6 +76,7 @@ exec --no-startup-id setbg
 exec --no-startup-id dunst
 # Composite manager:
 exec --no-startup-id xcompmgr
+#exec --no-startup-id compton --backend=glx --vsync --config /dev/null
 # Runs the key remapping scripts
 exec --no-startup-id remaps
 # Unclutter makes the mouse invisible after a brief period
@@ -48,9 +85,21 @@ exec --no-startup-id unclutter
 exec_always --no-startup-id mpdupdate
 # Podboat automatic queue and download
 exec_always --no-startup-id podentr
+#Starts Conky
+exec_always --no-startup-id conky
+
 
 bar {
-	font pango:mono 10
+
+	colors {
+			background $darkblack
+			statusline $darkwhite
+			separator $cyan
+			focused_workspace  $blue $darkblue $darkblack
+        		active_workspace   $blue $blue $darkwhite
+      			inactive_workspace $darkblack $darkblack $white
+        		urgent_workspace   $darkblack $darkblack $white
+		}
 	status_command i3blocks
 	position top
 	mode dock
@@ -65,7 +114,12 @@ bindsym $mod+Shift+space 	floating toggle
 bindsym $mod+space		focus mode_toggle
 
 bindsym $mod+Escape		workspace prev
-bindsym $mod+Shift+Escape 	exec --no-startup-id prompt "Exit i3?" "i3-msg exit"
+#bindsym $mod+Shift+Escape 	exec --no-startup-id prompt "Exit i3?" "i3-msg exit"
+
+
+#Navegar áreas de trabalho-
+bindsym $mod+Ctrl+Right workspace next
+bindsym $mod+Ctrl+Left workspace prev
 
 # bindsym $mod+BackSpace
 bindsym $mod+Shift+BackSpace	exec --no-startup-id prompt "Reboot computer?" "$reboot"
@@ -111,8 +165,8 @@ bindsym $mod+Shift+o		exec --no-startup-id i3resize right
 bindsym $mod+p			exec --no-startup-id lmc toggle
 bindsym $mod+Shift+p		exec --no-startup-id lmc pause
 
-bindsym $mod+a			exec --no-startup-id ddspawn dropdowncalc -f mono:pixelsize=24
-bindsym $mod+Shift+a		exec $term -e pulsemixer
+bindsym $mod+Shift+a			exec --no-startup-id ddspawn dropdowncalc -f mono:pixelsize=24
+bindsym $mod+a		exec $term -e pulsemixer
 
 bindsym $mod+s			gaps inner current plus 5
 bindsym $mod+Shift+s		gaps inner current minus 5
@@ -183,16 +237,19 @@ bindsym $mod+slash		split vertical ;; exec $term
 bindsym $mod+Shift+slash	kill
 bindsym $mod+backslash		workspace back_and_forth
 
-set $ws1 "1"
-set $ws2 "2"
-set $ws3 "3"
-set $ws4 "4"
-set $ws5 "5"
-set $ws6 "6"
-set $ws7 "7"
-set $ws8 "8"
-set $ws9 "9"
-set $ws10 "10"
+# Nome das áreas de trabalho: Workspaces
+set $ws1 1:Firefox 
+set $ws2 2:Arquivos 
+#
+# 
+set $ws3 3:Terminal 
+set $ws4 4:Telegram 
+set $ws5 5:Música 
+set $ws6 6:Steam 
+set $ws7 7:Torrent 
+set $ws8 8:
+set $ws9 9:
+set $ws10 10:
 
 # switch to workspace
 bindsym $mod+1		workspace $ws1
@@ -206,17 +263,29 @@ bindsym $mod+8		workspace $ws8
 bindsym $mod+9		workspace $ws9
 bindsym $mod+0		workspace $ws10
 
-# move focused container to workspace
-bindsym $mod+Shift+1	move container to workspace $ws1
-bindsym $mod+Shift+2	move container to workspace $ws2
-bindsym $mod+Shift+3	move container to workspace $ws3
-bindsym $mod+Shift+4	move container to workspace $ws4
-bindsym $mod+Shift+5	move container to workspace $ws5
-bindsym $mod+Shift+6	move container to workspace $ws6
-bindsym $mod+Shift+7	move container to workspace $ws7
-bindsym $mod+Shift+8	move container to workspace $ws8
-bindsym $mod+Shift+9	move container to workspace $ws9
-bindsym $mod+Shift+0	move container to workspace $ws10
+# Move focused container to workspace
+bindsym $mod+Ctrl+1 move container to workspace $ws1
+bindsym $mod+Ctrl+2 move container to workspace $ws2
+bindsym $mod+Ctrl+3 move container to workspace $ws3
+bindsym $mod+Ctrl+4 move container to workspace $ws4
+bindsym $mod+Ctrl+5 move container to workspace $ws5
+bindsym $mod+Ctrl+6 move container to workspace $ws6
+bindsym $mod+Ctrl+7 move container to workspace $ws7
+bindsym $mod+Ctrl+8 move container to workspace $ws8
+bindsym $mod+Ctrl+9 move container to workspace $ws9
+bindsym $mod+Ctrl+0 move container to workspace $ws10
+
+# Move to workspace with focused container
+bindsym $mod+Shift+1 move container to workspace $ws1; workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2; workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3; workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4; workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5; workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6; workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7; workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8; workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9; workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10; workspace $ws10
 
 for_window [class="Pinentry"] sticky enable
 for_window [class="sent"] border pixel 0px
@@ -233,7 +302,7 @@ for_window [title="mpvfloat"] border pixel 0
 no_focus [title="mpvfloat"]
 
 # #---Function Buttons---# #
-bindsym $mod+F1		exec --no-startup-id groff -kejpt -mom ~/.local/share/larbs/readme.mom -Tpdf | zathura -
+#bindsym $mod+F1		exec --no-startup-id groff -kejpt -mom ~/.local/share/larbs/readme.mom -Tpdf | zathura -
 bindsym $mod+F2		restart
 bindsym $mod+F3		exec --no-startup-id displayselect
 bindsym $mod+F4		exec --no-startup-id prompt "Hibernate computer?" "$hibernate"
@@ -243,7 +312,7 @@ bindsym $mod+F7		exec --no-startup-id td-toggle
 bindsym $mod+F8		exec --no-startup-id ~/.config/mutt/etc/mailsync.sh
 bindsym $mod+F9		exec --no-startup-id dmenumount
 bindsym $mod+F10	exec --no-startup-id dmenuumount
-bindsym $mod+F11	exec --no-startup-id ducksearch
+bindsym $mod+F1	exec --no-startup-id ducksearch
 bindsym $mod+F12	exec $term -e nmtui
 
 # #---Arrow Keys---# #
@@ -349,8 +418,10 @@ bindsym XF86Search		exec $BROWSER https://duckduckgo.com
 ##bindsym XF86Finance		exec
 ##bindsym XF86Game		exec
 bindsym XF86Shop		exec $BROWSER https://ebay.com
-bindsym XF86MonBrightnessDown	exec --no-startup-id xbacklight -dec 15
-bindsym XF86MonBrightnessUp	exec --no-startup-id xbacklight -inc 15
+#bindsym XF86MonBrightnessDown	exec --no-startup-id xbacklight -dec 15
+#bindsym XF86MonBrightnessUp	exec --no-startup-id xbacklight -inc 15
+bindsym XF86MonBrightnessDown	exec --no-startup-id light -U 1
+bindsym XF86MonBrightnessUp	exec --no-startup-id light -A 1
 bindsym XF86AudioMedia		exec --no-startup-id $term -e ncmpcpp
 bindsym XF86Display		exec --no-startup-id displayselect
 #bindsym XF86KbdLightOnOff	exec
@@ -363,3 +434,37 @@ bindsym XF86Documents		exec $term -e $FILE ~/Documents
 ##bindsym XF86Battery		exec
 ##bindsym XF86Bluetooth		exec
 bindsym XF86WLAN		exec $netrefresh
+
+# Set shut down, restart and locking features
+bindsym $mod+Shift+Escape mode "$mode_system"
+set $mode_system (S)air, (R)einiciar, (D)esligar
+mode "$mode_system" {
+    # (l)ock, bindsym l exec --no-startup-id i3exit lock, mode "default"
+    # (s)uspend,bindsym s exec --no-startup-id i3exit suspend, mode "default"
+    #bindsym u exec --no-startup-id i3exit switch_user, mode "default"
+    bindsym s exec --no-startup-id i3-msg exit, mode "default"
+    # (h)ibernate bindsym h exec --no-startup-id i3exit hibernate, mode "default"
+    bindsym r exec --no-startup-id $reboot, mode "default"
+    bindsym d exec --no-startup-id $shutdown, mode "default"
+
+    # exit system mode: "Enter" or "Escape"
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+# Move a janela atual para o segundo plano (scratchpad).
+bindsym Ctrl+Shift+Tab move scratchpad
+
+# Mostrar ou esconder janelas no scratchpad.
+# If there are multiple scratchpad windows, this command cycles through them.
+bindsym Ctrl+Tab scratchpad show
+
+#Facilita a minha vida, abre esta configuração
+bindsym $mod+Mod1+z exec --no-startup-id $term -e $EDITOR ~/.config/i3/config
+bindsym $mod+Mod1+x exec --no-startup-id $term -e $EDITOR ~/.config/i3blocks/config
+#bindsym $mod+o exec --no-startup-id $term -e $EDITOR ~/.config/conky/conky1.10_shortcuts_maia
+bindsym $mod+Mod1+c exec --no-startup-id $term -e $EDITOR ~/.config/conky/conky.conf
+
+#bindsym Ctrl+Escape exec i3lock -i ~/Pictures/trava.png
+bindsym Ctrl+Escape exec lock_and_blur
+bindsym $mod+mod1+s exec com.valvesoftware.Steam
