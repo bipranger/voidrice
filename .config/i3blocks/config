@@ -17,6 +17,9 @@ label=
 interval=once
 signal=6
 
+#[iplocate]
+#interval=30
+
 [pacpackages]
 label=
 interval=once
